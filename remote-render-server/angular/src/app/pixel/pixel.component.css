@@ -1,0 +1,19 @@
+#pixel-image {
+    width: 50px;
+    height: 43px;
+    position:absolute;
+    z-index:0;
+}
+
+#pixel-container {
+    display:inline-block;
+    width:50px; 
+    height:43px;
+    margin: 0 auto; 
+    position:relative; 
+}
+
+#pixel-canvas{
+    position:relative;
+    z-index:1;
+}

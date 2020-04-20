@@ -1,0 +1,36 @@
+button {
+    display: table-cell;
+    margin-right: 8px;
+    margin-top: 10px;
+  }
+
+.mat-progress-spinner { 
+    display: block;
+    position: absolute;
+    top: 118px;
+    left: 250px;
+}
+#metar-icon { 
+    position: relative;
+    top: 5px;
+    left: 0px;
+}
+
+
+.mat-divider{
+    border-top-width: 2px;
+    border-top-style: dashed;
+    margin-top: 10px;
+  }
+
+.success { 
+    color: green
+}
+
+.failure { 
+    color: red
+}
+
+mat-form-field {
+    width: 30%;
+  }

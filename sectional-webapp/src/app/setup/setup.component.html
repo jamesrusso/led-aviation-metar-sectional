@@ -1,0 +1,82 @@
+<mat-vertical-stepper #stepper (selectionChange)="stepChanged($event)">
+  <mat-step [stepControl]="initialSetupFormGroup" label="setpixelcount">
+    <form [formGroup]="initialSetupFormGroup">
+      <ng-template matStepLabel>Number of LEDs</ng-template>
+      <p class="mat-body">First, let us enter how many LEDS you have configured on the map.</p>
+      <mat-form-field>
+        <mat-label>Pixel Count</mat-label>
+        <input matInput placeholder="Pixel Count" formControlName="pixelcount" required>
+        <mat-error>
+          Value must be between 0 and 999
+        </mat-error>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step label="testleds">
+    <ng-template matStepLabel>Testing LEDs</ng-template>
+    <p>We are now running a self test on all the LEDs. Please make sure they are all working.</p>
+    <div>
+      <button mat-button-raised matStepperNext>Continue</button>
+    </div>
+  </mat-step>
+
+  <mat-step label="airportassignment">
+    <ng-template matStepLabel>Airport Assignment</ng-template>
+    <p>We will now go through each LED and specify the airport it represents. The current METAR will be loaded and
+      displayed. You obviously only want to include airports where METARS are available.</p>
+    <section>
+      <h2>{{ pixelIndex + 1 }} of {{ pixelCount }}</h2>
+      <form [formGroup]="airportSelectionFormGroup">
+        <mat-form-field>
+          <mat-hint>name or icao identifier</mat-hint>
+          <input matInput placeholder="Airport Identifier" aria-label="Airport" [matAutocomplete]="auto"
+            formControlName="airport">
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="airportSelected($event)"
+            [displayWith]="displayFn">
+            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+            <ng-container *ngIf="!isLoading">
+              <mat-option *ngFor="let airport of filteredAirports" [value]="airport">
+                <span><b>{{airport.icao_airport_code}}</b> ({{airport.name}})</span>
+              </mat-option>
+            </ng-container>
+          </mat-autocomplete>
+          <mat-error>
+            Not a valid airport
+          </mat-error>
+        </mat-form-field>
+        <span>
+          <mat-progress-spinner *ngIf="metar_loading" diameter="40" strokeWidth="5" class="spinner"
+            mode="indeterminate"></mat-progress-spinner>
+        </span>
+        <span *ngIf="metar">
+          <span id="metar-icon" class="material-icons success">check_circle</span>
+          {{ metar }}
+        </span>
+        <span *ngIf="metar_error">
+          <span id="metar-icon" class="material-icons failure">error</span>
+          {{metar_error}}
+        </span>
+      </form>
+
+      <button mat-raised-button (click)="previousPixel()">Prev Pixel</button>
+      <button mat-raised-button (click)="nextPixel()">Next Pixel</button>
+    </section>
+    <mat-divider></mat-divider>
+    <section>
+      <button mat-raised-button color="primary" matStepperNext>Continue</button>
+    </section>
+  </mat-step>
+
+  <mat-step label="finish">
+    <ng-template matStepLabel>Done</ng-template>
+    <p>Setup is complete. Click Finish to save and start the map.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="completeSetup()">Finish</button>
+    </div>
+  </mat-step>
+</mat-vertical-stepper>

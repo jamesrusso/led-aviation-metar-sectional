@@ -1,0 +1,24 @@
+version: 1
+formatters:
+    brief:
+        format: '%(asctime)s %(levelname)-8s %(threadName)s %(name)-15s %(message)s'
+        datefmt: '%Y-%m-%d %H:%M:%S'
+    precise: 
+        format: '%(asctime)s %(levelname)-8s %(threadName)s %(name)-15s %(message)s'
+        datefmt: '%Y-%m-%d %H:%M:%S'
+loggers: 
+    'sectional':
+        level: DEBUG
+        handlers: [file, console]
+        propogate: false
+handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: brief
+        level: DEBUG
+        stream: ext://sys.stdout
+      file:
+        class: logging.handlers.RotatingFileHandler
+        level: DEBUG
+        formatter: precise
+        filename: weathermap.log
