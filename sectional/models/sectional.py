@@ -5,7 +5,13 @@ from threading import Thread
 import logging
 
 class CategorySectional(object):
+
     def __init__(self, configuration):
+        """constructor for the CategorySectional object.
+        
+        Arguments:
+            configuration {Configuration} -- The configuration object.
+        """
         self.logger = logging.getLogger(__name__)
         self.airports = {}
         self.configuration = configuration
@@ -16,6 +22,13 @@ class CategorySectional(object):
         self.led_update_thread = None
 
     def airport(self, airport_icao_code):
+        """Obtain an airport given an airport icao code
+        
+        Arguments:
+            airport_icao_code {str} -- The icao airport code
+        Returns:
+            {Airport} -- The airport object for the given icao airport code
+        """
         return self.airports[airport_icao_code]
 
     def set_airport_color(self, airport, color):
@@ -24,11 +37,15 @@ class CategorySectional(object):
         airport.color_override = color
 
     def initialize(self):
+        """Initialize the sectional
+        """
         self.metar_refresh_thread = MetarRefreshThread(sectional=self)
         self.update_sunrise_sunset_thread = SunriseSunsetUpdateThread(sectional=self)
         self.led_update_thread = LEDUpdateThread(sectional=self)
 
     def run_self_test(self):
+        """Perform a self test on the sectional
+        """
         self.logger.info("run_self_test begin....")
         if (self.led_update_thread and self.led_update_thread.is_alive()):
             self.logger.info("shutting down led_update_thread...")
@@ -46,19 +63,33 @@ class CategorySectional(object):
         self.logger.info("self_test_thread has been started.")
 
     def set_led(self, idx, color): 
+        """Sets the led to the specifed color
+        
+        Arguments:
+            idx {int} -- The index of the pixel/led to set
+            color {Color} -- The color object which to set the pixel to.
+        """
         self.renderer.set_led(idx, color)
 
     def refresh_sunrise(self):
+        """Force a refresh of the sunrise/sunset data
+        """
         self.update_sunrise_sunset_thread.wait_condition.acquire()
         self.update_sunrise_sunset_thread.wait_condition.notify()
         self.update_sunrise_sunset_thread.wait_condition.release()
 
     def refresh_metars(self):
+        """Force a refresh of the metar data
+        """
         self.metar_refresh_thread.wait_condition.acquire()
         self.metar_refresh_thread.wait_condition.notify()
         self.metar_refresh_thread.wait_condition.release()
 
     def start(self):
+        """Start the sectional. This will first perform a self-test, then 
+        begin threads to start the downloading of the sunrise and sunset data,
+        the metar data and then finally start the LED update thread.
+        """
         try:
             if (self.configuration.setup_complete):
                 self.airports = DataService.create_airports(self.configuration)
@@ -77,6 +108,8 @@ class CategorySectional(object):
             self.shutdown()
 
     def shutdown(self):
+        """Shutdown the sectional. This will shutdown and wait for all threads to finish.
+        """
         self.logger.info("shutting down...")
         self.led_update_thread.shutdown()
         self.metar_refresh_thread.shutdown()
