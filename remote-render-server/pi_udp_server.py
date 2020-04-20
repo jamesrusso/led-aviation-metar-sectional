@@ -8,9 +8,9 @@ import struct
 """
 
 pixel_count = 74
-gpio_port = 18
+gpio_port = board.D18
 
-pixels = neopixel.NeoPixel(board.D18, pixel_count)
+pixels = neopixel.NeoPixel(gpio_port, pixel_count)
 pixels.fill((0,0,0))
 
 localIP = "0.0.0.0"
