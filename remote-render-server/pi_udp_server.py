@@ -14,7 +14,7 @@ pixels = neopixel.NeoPixel(board.D18, pixel_count)
 pixels.fill((0,0,0))
 
 localIP = "0.0.0.0"
-localPort = 5001
+localPort = 5006
 bufferSize = 1024
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 UDPServerSocket.bind((localIP, localPort))

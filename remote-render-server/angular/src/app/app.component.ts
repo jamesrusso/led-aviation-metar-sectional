@@ -17,11 +17,9 @@ export class AppComponent {
   	}
 
   setupSocketConnection() {
-  	console.log("hello");
     this.socket = io(environment.SOCKET_ENDPOINT);
-      	console.log("hello2");
     this.socket.on('connection', x => { 
-		console.log("got message");
+		console.log("got connection");
     });
     this.socket.on('led:set', item => { 
     	console.log("got message ",item);
