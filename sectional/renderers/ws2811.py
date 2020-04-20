@@ -2,7 +2,7 @@ import neopixel # pylint: disable=import-error
 import board # pylint: disable=import-error
 
 class Ws2811Renderer(object):
-    def __init__(self, pixel_count, gpio_port, rgb_order='RGB'):
+    def __init__(self, pixel_count, gpio_port, pixel_order='RGB'):
         """
         Create a new controller for the WS2811 based lights
 
@@ -12,10 +12,9 @@ class Ws2811Renderer(object):
         """
 
         self.pixel_count = pixel_count
-        self.rgb_order = rgb_order
 
         # Specify a hardware SPI connection on /dev/spidev0.0:
-        self.pixels = neopixel.NeoPixel(eval("board.D{}".format(gpio_port)), pixel_count, rgb_order=rgb_order, auto_write=False)
+        self.pixels = neopixel.NeoPixel(eval("board.D{}".format(gpio_port)), pixel_count, pixel_order=pixel_order, auto_write=False)
 
         # Clear all the pixels to turn them off.
         self.pixels.fill((0, 0, 0))

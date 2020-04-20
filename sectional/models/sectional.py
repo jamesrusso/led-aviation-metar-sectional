@@ -4,7 +4,6 @@ from sectional.services import DataService
 from threading import Thread
 import logging
 
-
 class CategorySectional(object):
     def __init__(self, configuration):
         self.logger = logging.getLogger(__name__)
