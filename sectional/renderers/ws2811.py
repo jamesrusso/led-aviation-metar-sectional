@@ -13,6 +13,13 @@ class Ws2811Renderer(object):
 
         self.pixel_count = pixel_count
 
+        if (pixel_order == 'RGB'):
+            pixel_order = neopixel.RGB
+        elif (pixel_order == 'GRB'):
+            pixel_order = neopixel.GRB
+        else:
+            raise ValueError("Unknown pixel order {}".format(pixel_order))
+
         # Specify a hardware SPI connection on /dev/spidev0.0:
         self.pixels = neopixel.NeoPixel(eval("board.D{}".format(gpio_port)), pixel_count, pixel_order=pixel_order, auto_write=False)
 
@@ -38,9 +45,12 @@ class Ws2811Renderer(object):
             raise ValueError("Unknown color {}".format(color))
 
         for p in pixel_index:
-            self.pixels[p] = (rgb_tuple[0], rgb_tuple[1], rgb_tuple[2])
+            self.pixels[int(p)] = (rgb_tuple[0], rgb_tuple[1], rgb_tuple[2])
 
         self.pixels.show()
 
     def shutdown(self):
+        """
+        This method called when shutting down the system. It is used to allow the renderer to cleanup any resources which were used.
+        """
         pass
