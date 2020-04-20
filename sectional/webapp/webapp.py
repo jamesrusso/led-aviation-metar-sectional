@@ -99,9 +99,9 @@ def get_metar(airport):
         if (len(metar) > 0):
             return jsonify({ 'metar': metar[0].metar, 'icao_airport_code': airport })
         else:
-            return jsonify({ 'status': 'ERROR', 'message': 'METAR could not be obained for {}'.format(airport)}), 404
+            return jsonify({ 'status': 'ERROR', 'message': 'A METAR could not be found for {}'.format(airport)}), 404
     except Exception:
-            return jsonify({ 'status': 'ERROR', 'message': 'METAR could not be obained for {}'.format(airport)}), 500
+            return jsonify({ 'status': 'ERROR', 'message': 'Error while attempting to load METAR for {}'.format(airport)}), 500
 
 @app.route('/api/refreshmetars', methods=['POST'])
 def refresh_metars():
