@@ -4,7 +4,6 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { DataserviceService } from '../dataservice.service'
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete'
 import { debounceTime, tap, switchMap, finalize, filter } from 'rxjs/operators';
-import { MatProgressSpinner } from '@angular/material/progress-spinner'
 
 interface AirportForPixelResponse {
   icao_airport_code: string
