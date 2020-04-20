@@ -3,12 +3,12 @@ import logging
 
 
 class LEDUpdateThread(Thread):
-    def __init__(self, sectional, renderer):
+    def __init__(self, sectional):
         Thread.__init__(self, daemon=True, name="LEDUpdateThread")
         self.logger = logging.getLogger(__name__)
         self.sectional = sectional
         self.running = True
-        self.renderer = renderer
+        self.renderer = sectional.renderer
         self.condition = Condition()
 
     def shutdown(self):

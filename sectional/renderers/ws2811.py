@@ -15,25 +15,11 @@ class Ws2811Renderer(object):
         self.rgb_order = rgb_order
 
         # Specify a hardware SPI connection on /dev/spidev0.0:
-        self.pixels = neopixel.NeoPixel(eval("board.D{}".format(gpio_port)), pixel_count, auto_write=False)
+        self.pixels = neopixel.NeoPixel(eval("board.D{}".format(gpio_port)), pixel_count, rgb_order=rgb_order, auto_write=False)
 
         # Clear all the pixels to turn them off.
         self.pixels.fill((0, 0, 0))
         self.pixels.show()
-
-    def get_led(self, pixel_index):
-        """
-        Obtain the LED status for the specified pixel index.
-
-        Arguments:
-            pixel_index {int} -- the index of pixel value to obtain.
-        """
-
-        value = self.pixels[pixel_index]
-        if (self.rgb_order is 'GRB'):
-            return (value[1], value[0], value[2])
-        elif (self.rgb_order is 'RGB'):
-            return value
 
     def set_led(self, pixel_index, color):
         """
@@ -48,15 +34,12 @@ class Ws2811Renderer(object):
             pixel_index = [pixel_index]
 
         rgb_tuple = color.rgb
-
+        
         if (rgb_tuple is None):
             raise ValueError("Unknown color {}".format(color))
 
         for p in pixel_index:
-            if (self.rgb_order == 'GRB'):
-                self.pixels[p] = (rgb_tuple[1], rgb_tuple[0], rgb_tuple[2])
-            elif (self.rgb_order is 'RGB'):
-                self.pixels[p] = (rgb_tuple[0], rgb_tuple[1], rgb_tuple[2])
+            self.pixels[p] = (rgb_tuple[0], rgb_tuple[1], rgb_tuple[2])
 
         self.pixels.show()
 

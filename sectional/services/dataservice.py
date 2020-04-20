@@ -46,7 +46,7 @@ class DataService(object):
         return airports
 
     @classmethod
-    def create_airports(cls, airport_codes):
+    def create_airports(cls, configuration):
         """
         Create all the airport objects which are required for the applicaiton
 
@@ -69,9 +69,9 @@ class DataService(object):
         airport_map = {}
 
         for row in reader:
-            if (row['ident'] in airport_codes.keys()):
-                pixels = airport_codes[row['ident']]
-                airport_map[row['ident']] = Airport(icao_airport_code=row["ident"], lat=row["latitude_deg"], long=row["longitude_deg"], pixels=pixels)
+            if (row['ident'] in configuration.airports.keys()):
+                pixels = configuration.airports[row['ident']]
+                airport_map[row['ident']] = Airport(configuration=configuration, icao_airport_code=row["ident"], lat=row["latitude_deg"], long=row["longitude_deg"], pixels=pixels)
 
         return airport_map
 

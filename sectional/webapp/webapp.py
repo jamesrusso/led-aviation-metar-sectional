@@ -7,10 +7,9 @@ from enum import Enum
 from datetime import datetime
 import json
 
-sectional = CategorySectional()
+sectional = None
 
 app = Flask(__name__, static_url_path='')
-configuration = Configuration()
 
 
 @app.route('/<path:path>.js', methods=['GET'])
@@ -49,13 +48,13 @@ def airports():
 @app.route('/api/pixelcount', methods=['POST'])
 def set_led_count():
     print(request.json)
-    configuration.pixelcount = int(request.json['pixelcount'])
-    configuration.save_config()
-    return jsonify({'pixelcount': configuration.pixelcount})
+    sectional.configuration.pixelcount = int(request.json['pixelcount'])
+    sectional.configuration.save_config()
+    return jsonify({'pixelcount': sectional.configuration.pixelcount})
 
 @app.route('/api/pixelcount', methods=['GET'])
 def get_led_count():
-    return jsonify({'pixelcount': configuration.pixelcount})
+    return jsonify({'pixelcount': sectional.configuration.pixelcount})
 
 @app.route('/api/selftest', methods=['POST'])
 def run_self_test():
@@ -64,14 +63,14 @@ def run_self_test():
 
 @app.route('/api/pixel/<index>', methods=['GET'])
 def get_airport_for_pixel(index):
-    icao_airport_code = configuration.get_airport_for_pixel(index)
+    icao_airport_code = sectional.configuration.get_airport_for_pixel(index)
     return jsonify({ 'icao_airport_code': icao_airport_code })
 
 @app.route('/api/pixel/<index>', methods=['POST'])
 def set_airport_for_pixel(index): 
     icao_airport_code = request.json['icao_airport_code']
-    configuration.set_airport_for_pixel(index, icao_airport_code)
-    configuration.save_config()
+    sectional.configuration.set_airport_for_pixel(index, icao_airport_code)
+    sectional.configuration.save_config()
     return jsonify({ 'icao_airport_code': icao_airport_code })
 
 @app.route('/api/setpixel/<index>', methods=['POST'])
@@ -82,15 +81,15 @@ def set_led(index):
 
 @app.route('/api/clearpixels', methods=['POST'])
 def clear_pixels():
-    for idx in range(configuration.pixelcount):
+    for idx in range(sectional.configuration.pixelcount):
         sectional.set_led(int(idx), Color.BLACK())
     return jsonify({'status': 'OK'})
 
 @app.route('/api/setup_complete', methods=['POST'])
 def setup_complete(): 
     setup_complete = request.json['setup_complete']
-    configuration.setup_complete(setup_complete)
-    configuration.save_config()
+    sectional.configuration.setup_complete(setup_complete)
+    sectional.configuration.save_config()
     sectional.start()
 
 @app.route('/api/metar/<airport>', methods=['GET'])

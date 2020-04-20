@@ -9,7 +9,6 @@ class SelfTestThread(Thread):
         Thread.__init__(self, name="SelfTestThread")
         self.logger = logging.getLogger(__name__)
         self.sectional = sectional
-        self.configuration = Configuration()
         self.running = True
         self.condition = Condition()
 
@@ -27,7 +26,7 @@ class SelfTestThread(Thread):
                 break
 
             self.condition.acquire()
-            [self.configuration.renderer.set_led(x, color) for x in range(self.configuration.pixelcount)]
+            [self.sectional.renderer.set_led(x, color) for x in range(self.sectional.configuration.pixelcount)]
             self.condition.wait(timeout=1)
 
         self.logger.info("self test thread is now complete.")

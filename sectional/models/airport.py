@@ -4,10 +4,10 @@ import logging
 
 class Airport(object):
 
-    def __init__(self, icao_airport_code, lat, long, pixels):
+    def __init__(self, configuration, icao_airport_code, lat, long, pixels):
         self.logger = logging.getLogger(__name__)
         self.__icao_airport_code = icao_airport_code
-        self.__config = Configuration()
+        self.__configuration = configuration
         self.__lat = lat
         self.__long = long
         self.__metar = None
@@ -20,9 +20,9 @@ class Airport(object):
         return self.__pixels
 
     @property
-    def config(self):
-        return self.__config
-
+    def configuration(self):
+        return self.__configuration
+        
     @property
     def color_override(self):
         return self.__color_override
@@ -64,23 +64,23 @@ class Airport(object):
             self.logger.info("color color_override is enabled")
             return self.color_override
 
-        if (self.sunrise_data is None or self.config.night_lights is False):
-            return self.config.color_for_condition(self.category)
+        if (self.sunrise_data is None or self.configuration.night_lights is False):
+            return self.configuration.color_for_condition(self.category)
 
         # Sunrise
         if (self.sunrise_data.is_daylight and self.sunrise_data.is_twilight):
-            return self.config.color_for_condition(AirportCondition.NIGHT_DARK).fade_to(self.config.color_for_condition(self.category), self.sunrise_data.proportion)
+            return self.configuration.color_for_condition(AirportCondition.NIGHT_DARK).fade_to(self.configuration.color_for_condition(self.category), self.sunrise_data.proportion)
 
         # Daylight
         elif (self.sunrise_data.is_daylight):
-            return self.config.color_for_condition(self.category)
+            return self.configuration.color_for_condition(self.category)
 
         # Sunset
         elif (self.sunrise_data.is_nighttime and self.sunrise_data.is_twilight):
-            return self.config.color_for_condition(self.category).fade_to(self.config.color_for_condition(AirportCondition.NIGHT), self.sunrise_data.proportion)
+            return self.configuration.color_for_condition(self.category).fade_to(self.configuration.color_for_condition(AirportCondition.NIGHT), self.sunrise_data.proportion)
 
         elif (self.sunrise_data.is_nighttime):
-            return self.config.color_for_condition(AirportCondition.NIGHT_DARK)
+            return self.configuration.color_for_condition(AirportCondition.NIGHT_DARK)
 
         else:
             return Color.OFF

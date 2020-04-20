@@ -1,15 +1,13 @@
-from sectional.models import AirportCondition, Configuration
+from sectional.models import AirportCondition
 import re
 import logging
 from datetime import datetime, timedelta
-
 
 class Metar(object):
 
     def __init__(self, metar_text):
         self.logger = logging.getLogger(__name__)
         self.metar = metar_text
-        self.config = Configuration()
         self.icao_airport_code = self.metar.split(' ')[0]
         self.issue_time = self.__caculate_issue_time()
         self.visibility = self.__extract_visibility()
@@ -128,11 +126,7 @@ class Metar(object):
             metar_age_minutes = self.age.total_seconds() / 60.0
             self.logger.info("{} - Issued {:.1f} minutes ago".format(
                 self.icao_airport_code, metar_age_minutes))
-            if (metar_age_minutes > self.config.metar_inop_age):
-                return AirportCondition.INOP
-            elif (metar_age_minutes > self.config.metar_invalid_age):
-                return AirportCondition.INVALID
-            elif self.ceiling == AirportCondition.INVALID or self.visibility == AirportCondition.INVALID:
+            if self.ceiling == AirportCondition.INVALID or self.visibility == AirportCondition.INVALID:
                 return AirportCondition.INVALID
             elif self.visibility == AirportCondition.SMOKE:
                 return AirportCondition.SMOKE

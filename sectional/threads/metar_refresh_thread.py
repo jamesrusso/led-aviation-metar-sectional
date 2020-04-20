@@ -10,7 +10,6 @@ class MetarRefreshThread(Thread):
         self.logger = logging.getLogger(__name__)
         Thread.__init__(self, name="MetarRefreshThread", daemon=True)
         self.sectional = sectional
-        self.config = Configuration()
         self.wait_condition = Condition()
         self.initial_load_event = Event()
         self.running = True
@@ -30,6 +29,6 @@ class MetarRefreshThread(Thread):
                 for metar in metars:
                     self.sectional.airport(metar.icao_airport_code).metar = metar
                 self.initial_load_event.set()
-                self.wait_condition.wait(self.config.metar_refresh_interval * 60)
+                self.wait_condition.wait(self.sectional.configuration.metar_refresh_interval * 60)
             except Exception:
                 self.logger.error("exception occurred while obtaining metars.",exc_info=True)
