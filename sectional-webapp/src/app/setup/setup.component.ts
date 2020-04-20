@@ -40,7 +40,7 @@ export class SetupComponent implements OnInit {
     });
 
     this.airportSelectionFormGroup = this.formBuilder.group({
-      airport: [null, [Validators.required, this.RequireMatch]]
+      airport: [null, [Validators.required]]
     });
   }
 
@@ -60,9 +60,7 @@ export class SetupComponent implements OnInit {
       this.pixelIndex = 0
       this.loadPixelData()
     } else if (event.selectedStep.label == "finish") {
-
     }
-
   }
 
   loadPixelData() {
@@ -72,8 +70,7 @@ export class SetupComponent implements OnInit {
 
     this.dataservice.setpixelcolor(this.pixelIndex, '#f00').subscribe()
     this.dataservice.getairportforpixel(this.pixelIndex).subscribe((data: AirportForPixelResponse) => {
-      this.loadMetar(data.icao_airport_code)
-      this.airportSelectionFormGroup.get('airport').setValue(data)
+      this.airportSelectionFormGroup.get('airport').setValue(data.icao_airport_code)
       this.airportSelectionFormGroup.markAsUntouched()
     })
 
@@ -115,7 +112,7 @@ export class SetupComponent implements OnInit {
   }
 
   displayFn(obj: any) {
-    return obj ? obj.icao_airport_code : ''
+    return obj
   }
 
   airportSelected(event: MatAutocompleteSelectedEvent) {
@@ -141,7 +138,8 @@ export class SetupComponent implements OnInit {
       this.metar_loading = false
       this.metar = results.metar
     }, (error) => {
-      this.metar_error = "Unable to load METAR for " + icao_airport_code
+      console.log("METAR Error", error)
+      this.metar_error = error.error.message
       this.metar = null
       this.metar_loading = false
     });
@@ -149,6 +147,11 @@ export class SetupComponent implements OnInit {
 
 
   ngOnInit() {
+
+    this.airportSelectionFormGroup.get('airport').valueChanges.pipe(debounceTime(500)).
+    subscribe((data) => { 
+      this.loadMetar(data)
+    });
 
     this.airportSelectionFormGroup.get('airport').valueChanges
       .pipe(

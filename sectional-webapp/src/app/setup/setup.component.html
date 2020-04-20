@@ -39,7 +39,7 @@
             [displayWith]="displayFn">
             <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
             <ng-container *ngIf="!isLoading">
-              <mat-option *ngFor="let airport of filteredAirports" [value]="airport">
+              <mat-option *ngFor="let airport of filteredAirports" [value]="airport.icao_airport_code">
                 <span><b>{{airport.icao_airport_code}}</b> ({{airport.name}})</span>
               </mat-option>
             </ng-container>
@@ -61,7 +61,6 @@
           {{metar_error}}
         </span>
       </form>
-
       <button mat-raised-button (click)="previousPixel()">Prev Pixel</button>
       <button mat-raised-button (click)="nextPixel()">Next Pixel</button>
     </section>

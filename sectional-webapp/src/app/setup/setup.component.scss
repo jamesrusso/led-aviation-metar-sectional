@@ -5,10 +5,10 @@ button {
   }
 
 .mat-progress-spinner { 
-    display: block;
-    position: absolute;
-    top: 118px;
-    left: 250px;
+    display: inline;
+    position: relative;
+    top: -15px;
+    left: 0px;
 }
 #metar-icon { 
     position: relative;
