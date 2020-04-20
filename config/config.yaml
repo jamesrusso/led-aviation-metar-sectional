@@ -16,6 +16,5 @@ night_lights: true
 pixelcount: 73
 setup_complete: false
 renderer_config:
-  hostname: 10.20.219.92
-  name: remote
-  port: 5001
+    name: ws2811
+    gpio_port: 18
