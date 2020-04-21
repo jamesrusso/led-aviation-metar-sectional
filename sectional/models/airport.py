@@ -69,7 +69,7 @@ class Airport(object):
 
         # Sunrise
         if (self.sunrise_data.is_daylight and self.sunrise_data.is_twilight):
-            return self.configuration.get_color_for_condition(AirportCondition.NIGHT_DARK).fade_to(self.configuration.color_for_condition(self.category), self.sunrise_data.proportion)
+            return self.configuration.get_color_for_condition(AirportCondition.NIGHT_DARK).fade_to(self.configuration.get_color_for_condition(self.category), self.sunrise_data.proportion)
 
         # Daylight
         elif (self.sunrise_data.is_daylight):
@@ -77,7 +77,7 @@ class Airport(object):
 
         # Sunset
         elif (self.sunrise_data.is_nighttime and self.sunrise_data.is_twilight):
-            return self.configuration.get_color_for_condition(self.category).fade_to(self.configuration.color_for_condition(AirportCondition.NIGHT), self.sunrise_data.proportion)
+            return self.configuration.get_color_for_condition(self.category).fade_to(self.configuration.get_color_for_condition(AirportCondition.NIGHT), self.sunrise_data.proportion)
 
         elif (self.sunrise_data.is_nighttime):
             return self.configuration.get_color_for_condition(AirportCondition.NIGHT_DARK)
