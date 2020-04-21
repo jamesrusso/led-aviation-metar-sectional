@@ -3,7 +3,6 @@ import logging
 
 
 class Airport(object):
-
     def __init__(self, configuration, icao_airport_code, lat, long, pixels):
         self.logger = logging.getLogger(__name__)
         self.__icao_airport_code = icao_airport_code
@@ -97,9 +96,9 @@ class Airport(object):
     def category(self):
         if (self.metar is None):
             return AirportCondition.INVALID
-        elif(self.metar.age.total_seconds() > self.configuration.metar_invalid_age):
+        elif(self.metar.age.total_seconds() > self.configuration.metar_invalid_age * 60 ):
             return AirportCondition.INVALID
-        elif(self.metar.age.total_seconds() > self.configuration.metar_inop_age):
+        elif(self.metar.age.total_seconds() > self.configuration.metar_inop_age * 60):
             return AirportCondition.INOP
         else:
             return self.metar.category
