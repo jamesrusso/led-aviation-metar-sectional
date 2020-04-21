@@ -18,6 +18,14 @@ export class ConfigComponent implements OnInit {
     this.dataservice.set_condition(key, this.conditions[key]).subscribe()
   }
 
+  refreshMetars() { 
+    this.dataservice.refreshmetars().subscribe()
+  }
+
+  refreshSunrise() { 
+    this.dataservice.refreshsunrisedata().subscribe();
+  }
+
   blinkChanged(key, blink: MatCheckboxChange) { 
     this.conditions[key].blink = blink.checked
     this.dataservice.set_condition(key, this.conditions[key]).subscribe()

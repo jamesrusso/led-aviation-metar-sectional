@@ -1,3 +1,15 @@
+
+<h2>Actions</h2>
+
+<section>
+    <div>
+        <button mat-button (click)="refreshMetars()" color="primary">Refresh Metars</button>
+    </div>
+    <div>
+        <button mat-button (click)="refreshSunrise()" color="primary">Refresh Sunrise/Sunset Data</button>
+    </div>
+</section>
+
 <h2>Condition Colors</h2>
 <div *ngFor="let condition of conditions | keyvalue">
     <span class="condition-label">{{ condition.key }}</span>

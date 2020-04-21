@@ -67,12 +67,20 @@ export class DataserviceService {
     return this.http.get('/api/metar/'+airport).pipe(catchError(this.handleError))
   }
 
+  public refreshsunrisedata() { 
+    return this.http.post('/api/refreshsunrise', null).pipe(catchError(this.handleError))
+  }
+  
+  public refreshmetars() { 
+    return this.http.post('/api/refreshmetars', null).pipe(catchError(this.handleError))
+  }
+
   public get_airports() : any { 
-  	return this.http.get('/api/airports')
+  	return this.http.get('/api/airports').pipe(catchError(this.handleError))
   }
 
   public get_conditions() : any { 
-    return this.http.get('/api/conditions')
+    return this.http.get('/api/conditions').pipe(catchError(this.handleError))
   }
 
   public set_condition(condition, color) : any { 
