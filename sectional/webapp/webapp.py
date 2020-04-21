@@ -144,6 +144,17 @@ def set_condition(condition):
     sectional.configuration.save_config()
     return jsonify({'status': 'OK'})
 
+@app.route('/api/getoption/<name>', methods=['GET'])
+def get_option(name): 
+    value = getattr(sectional.configuration, name)
+    return jsonify({'status': 'OK', 'results': { 'name': name, 'value': value }});
+
+@app.route('/api/setoption/<name>', methods=['POST'])
+def set_option(name): 
+    option = request.json
+    setattr(sectional.configuration, name, option['value'])
+    return jsonify({'status': 'OK', 'results':{ 'name': name, 'value': option['value'] } });
+
 @app.route('/api/airportsearch', methods=['GET'])
 def airport_search():
     q = request.args['q']
