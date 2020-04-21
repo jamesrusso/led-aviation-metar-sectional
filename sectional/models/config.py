@@ -16,6 +16,12 @@ DEFAULT_COLOR_FOR_CONDITION = {
     AirportCondition.SMOKE: Color('#323232', blink=False),
     AirportCondition.VFR: Color('#00ff00', blink=False)
 }
+DEFAULT_METAR_INOP_AGE = 180
+DEFAULT_METAR_INVALID_AGE = 90
+DEFAULT_METAR_REFRESH_INTERVAL =15
+DEFAULT_NIGHT_LIGHTS = True
+DEFAULT_PIXEL_COUNT = 50
+DEFAULT_SUNRISE_REFRESH_INTERVAL = 1080
 
 class Configuration(object):
     def __init__(self, config_path='./config/config.yaml'):
@@ -24,6 +30,7 @@ class Configuration(object):
         self._renderer = None
         self._config['pixel_map'] = {}
         self._config['conditions'] = {}
+        self._conditions = {}
         self.__setup_defaults()
         self.path = config_path
 
@@ -32,26 +39,25 @@ class Configuration(object):
             self._config[name] = value
 
     def __setup_defaults(self):
-
         self.__set_default('conditions', {})
         self.__set_default('pixel_map', {})
-        self.__set_default('pixel_count', 50)
+        self.__set_default('pixel_count', DEFAULT_PIXEL_COUNT)
         self.__set_default('renderer_config', {'hostname': '127.0.0.1', 'name': 'remote', 'port': 5006})
-        self.__set_default('sunrise_refresh_interval', 1080)
-        self.__set_default('metar_inop_age', 180)
-        self.__set_default('metar_invalid_age', 90)
-        self.__set_default('metar_refresh_interval', 15)
-        self.__set_default('night_lights', True)
+        self.__set_default('sunrise_refresh_interval', DEFAULT_SUNRISE_REFRESH_INTERVAL)
+        self.__set_default('metar_inop_age', DEFAULT_METAR_INOP_AGE)
+        self.__set_default('metar_invalid_age', DEFAULT_METAR_INVALID_AGE)
+        self.__set_default('metar_refresh_interval', DEFAULT_METAR_REFRESH_INTERVAL)
+        self.__set_default('night_lights', DEFAULT_NIGHT_LIGHTS)
 
         for condition in AirportCondition:
             color = DEFAULT_COLOR_FOR_CONDITION[condition]
             if (condition.value not in self._config['conditions']):
-                self._config['conditions'][condition.value] = color
+                self._config['conditions'][condition.value] = { 'color': color.html_color, 'blink': color.blink }
 
     def __generate_colors_for_conditions(self):
+        self._conditions = {}
         for (key, value) in self._config['conditions'].items():
-            if (type(value) is dict):
-                self._config['conditions'][key] = Color(value['color'], value['blink'])
+                self._conditions[key] = Color(value['color'], value['blink'])
 
     def load_config(self):
         self.lock.acquire()
@@ -68,8 +74,7 @@ class Configuration(object):
         self.lock.release()
 
     def get_color_for_condition(self, condition):
-        obj = self._config['conditions'][condition.value]
-        return Color(obj.color, blink=obj.blink)
+        return self.conditions[condition.value]
 
     def set_color_for_condition(self, condition, color):
         if (type(color) is not Color):
@@ -78,11 +83,12 @@ class Configuration(object):
         if (type(condition) is str):
             condition = AirportCondition(condition)
 
-        self._config['conditions'][condition.name] = color
+        self._config['conditions'][condition.name] = { 'color': color.html_color, 'blink': color.blink }
+        self._conditions[condition.name] = color
 
     @property
     def conditions(self):
-        return self._config['conditions']
+        return self._conditions
 
     @property
     def metar_refresh_interval(self):
