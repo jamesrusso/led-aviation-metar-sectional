@@ -65,22 +65,22 @@ class Airport(object):
             return self.color_override
 
         if (self.sunrise_data is None or self.configuration.night_lights is False):
-            return self.configuration.color_for_condition(self.category)
+            return self.configuration.get_color_for_condition(self.category)
 
         # Sunrise
         if (self.sunrise_data.is_daylight and self.sunrise_data.is_twilight):
-            return self.configuration.color_for_condition(AirportCondition.NIGHT_DARK).fade_to(self.configuration.color_for_condition(self.category), self.sunrise_data.proportion)
+            return self.configuration.get_color_for_condition(AirportCondition.NIGHT_DARK).fade_to(self.configuration.color_for_condition(self.category), self.sunrise_data.proportion)
 
         # Daylight
         elif (self.sunrise_data.is_daylight):
-            return self.configuration.color_for_condition(self.category)
+            return self.configuration.get_color_for_condition(self.category)
 
         # Sunset
         elif (self.sunrise_data.is_nighttime and self.sunrise_data.is_twilight):
-            return self.configuration.color_for_condition(self.category).fade_to(self.configuration.color_for_condition(AirportCondition.NIGHT), self.sunrise_data.proportion)
+            return self.configuration.get_color_for_condition(self.category).fade_to(self.configuration.color_for_condition(AirportCondition.NIGHT), self.sunrise_data.proportion)
 
         elif (self.sunrise_data.is_nighttime):
-            return self.configuration.color_for_condition(AirportCondition.NIGHT_DARK)
+            return self.configuration.get_color_for_condition(AirportCondition.NIGHT_DARK)
 
         else:
             return Color.OFF

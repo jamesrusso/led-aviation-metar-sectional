@@ -1,6 +1,9 @@
-<h1>LED Sectional Map</h1>
-<button mat-menu-item [routerLink]="[ '/setup' ]">Setup Wizard</button>
-<button mat-menu-item>Config</button>
+<mat-toolbar color="primary">
+  <span>LED Metar Sectional</span>
+  <button [routerLink]="['setup']" mat-button>Setup Wizard</button>
+  <button [routerLink]="['config']" mat-button>Config</button>
+</mat-toolbar>
 
-
-<router-outlet></router-outlet>
+<section class="main-section">
+  <router-outlet></router-outlet>
+</section>

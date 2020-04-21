@@ -1,3 +1,11 @@
+<h1>
+  Setup Wizard
+</h1>
+<section class="body2">
+  This is a setup wizard which will help you setup your map by specifying the number of LEDs, testing the LEDs and then
+  finally assigning each LED to an airport with a METAR.
+</section>
+
 <mat-vertical-stepper #stepper (selectionChange)="stepChanged($event)">
   <mat-step [stepControl]="initialSetupFormGroup" label="setpixelcount">
     <form [formGroup]="initialSetupFormGroup">
@@ -11,7 +19,7 @@
         </mat-error>
       </mat-form-field>
       <div>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-button color="primary" matStepperNext>Next</button>
       </div>
     </form>
   </mat-step>
@@ -20,14 +28,14 @@
     <ng-template matStepLabel>Testing LEDs</ng-template>
     <p>We are now running a self test on all the LEDs. Please make sure they are all working.</p>
     <div>
-      <button mat-button-raised matStepperNext>Continue</button>
+      <button mat-button color="primary" matStepperNext>Continue</button>
     </div>
   </mat-step>
 
   <mat-step label="airportassignment">
     <ng-template matStepLabel>Airport Assignment</ng-template>
     <p>We will now go through each LED and specify the airport it represents. The current METAR will be loaded and
-      displayed. You obviously only want to include airports where METARS are available.</p>
+      displayed for you to confirm that airport you have choose has a METAR available.</p>
     <section>
       <h2>{{ pixelIndex + 1 }} of {{ pixelCount }}</h2>
       <form [formGroup]="airportSelectionFormGroup">
@@ -48,10 +56,6 @@
             Not a valid airport
           </mat-error>
         </mat-form-field>
-        <span>
-          <mat-progress-spinner *ngIf="metar_loading" diameter="40" strokeWidth="5" class="spinner"
-            mode="indeterminate"></mat-progress-spinner>
-        </span>
         <span *ngIf="metar">
           <span id="metar-icon" class="material-icons success">check_circle</span>
           {{ metar }}
@@ -60,13 +64,25 @@
           <span id="metar-icon" class="material-icons failure">error</span>
           {{metar_error}}
         </span>
+        <span>
+        <mat-progress-spinner *ngIf="metar_loading" diameter="25" strokeWidth="3" class="spinner"
+            mode="indeterminate">
+        </mat-progress-spinner>
+        </span>
       </form>
-      <button mat-raised-button (click)="previousPixel()">Prev Pixel</button>
-      <button mat-raised-button (click)="nextPixel()">Next Pixel</button>
+      <button mat-raised-button (click)="previousPixel()">
+        <span class="material-icons">
+          keyboard_arrow_left
+        </span>Prev Pixel
+      </button>
+      <button mat-raised-button (click)="nextPixel()">
+        Next Pixel<span class="material-icons">
+          keyboard_arrow_right
+        </span></button>
     </section>
     <mat-divider></mat-divider>
     <section>
-      <button mat-raised-button color="primary" matStepperNext>Continue</button>
+      <button mat-button color="primary" matStepperNext>Continue</button>
     </section>
   </mat-step>
 

@@ -2,6 +2,7 @@ import yaml
 from sectional.models import AirportCondition
 from sectional.models import Color
 from sectional.renderers import RendererFactory
+
 from threading import Lock
 
 class Configuration(object):
@@ -25,15 +26,27 @@ class Configuration(object):
             self._condition_map[condition] = Color(self._config['conditions'][condition.value])
         self.lock.release()
 
-
     def save_config(self, path='./config/config.yaml'):
         self.lock.acquire()
         with open(path, 'w+') as s:
             yaml.dump(self._config, s)
         self.lock.release()
 
-    def color_for_condition(self, condition):
+    def get_color_for_condition(self, condition):
         return self._condition_map[condition]
+
+    def set_color_for_condition(self, condition, color):
+        if (type(color) is not Color):
+            ValueError('color must be of type Color')
+        
+        if (type(condition) is str):
+            condition = AirportCondition(condition)
+
+        self._condition_map[condition] = color
+
+    @property
+    def condition_color_map(self):
+        return dict([(item[0].value, item[1].rgb) for item in self._condition_map.items()])
 
     @property
     def metar_refresh_interval(self):

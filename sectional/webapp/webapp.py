@@ -113,6 +113,17 @@ def refresh_sunrise():
     sectional.refresh_sunrise()
     return jsonify({"status": "OK"})
 
+@app.route('/api/conditions', methods=['GET'])
+def get_conditions():
+    return jsonify(sectional.configuration.condition_color_map)
+
+@app.route('/api/condition/<condition>', methods=['POST'])
+def set_condition(condition):
+    color_array = request.json['color']
+    color = Color(color_array)
+    sectional.configuration.set_color_for_condition(condition, color)
+    return jsonify({'status': 'OK'})
+
 @app.route('/api/airportsearch', methods=['GET'])
 def airport_search():
     q = request.args['q']

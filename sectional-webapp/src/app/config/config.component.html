@@ -1,0 +1,5 @@
+<h2>Condition Colors</h2>
+<div *ngFor="let condition of conditions | keyvalue">
+    <span class="condition-label">{{ condition.key }}</span>
+    <mcc-color-picker class="condition-color" (selected)="colorSelected(condition.key, $event)" [selectedColor]="condition.value"></mcc-color-picker>
+</div>

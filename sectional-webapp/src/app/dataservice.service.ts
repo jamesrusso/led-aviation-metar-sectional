@@ -71,4 +71,12 @@ export class DataserviceService {
   	return this.http.get('/api/airports')
   }
 
+  public get_conditions() : any { 
+    return this.http.get('/api/conditions')
+  }
+
+  public set_condition(condition, color) : any { 
+    return this.http.post('/api/condition/'+condition, { 'color': color });
+  }
+
 }
