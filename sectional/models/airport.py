@@ -97,9 +97,9 @@ class Airport(object):
     def category(self):
         if (self.metar is None):
             return AirportCondition.INVALID
-        elif(self.metar.age.total_seconds() > 90 * 60):
+        elif(self.metar.age.total_seconds() > self.configuration.metar_invalid_age):
             return AirportCondition.INVALID
-        elif(self.metar.age.total_seconds() > 120 * 60):
+        elif(self.metar.age.total_seconds() > self.configuration.metar_inop_age):
             return AirportCondition.INOP
         else:
             return self.metar.category
