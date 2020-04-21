@@ -8,6 +8,7 @@ LOGGER = logging.getLogger(__name__)
 if (__name__ == "__main__"):
     logging_helper.initialize_logging()
     configuration = Configuration()
+    configuration.load_config()
     sectional = CategorySectional(configuration=configuration)
     sectional.initialize()
     sectional.start()

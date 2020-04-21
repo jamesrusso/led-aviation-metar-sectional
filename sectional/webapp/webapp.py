@@ -2,6 +2,7 @@ from sectional.models import CategorySectional
 from sectional.models import Configuration, Color
 from sectional.services import DataService
 
+from flask.json import JSONEncoder
 from flask import Flask, jsonify, send_from_directory, request, abort
 from enum import Enum
 from datetime import datetime
@@ -11,6 +12,23 @@ sectional = None
 
 app = Flask(__name__, static_url_path='')
 
+class JSON_Improved(JSONEncoder):
+    def default(self, obj):
+        try:
+            if isinstance(obj, Color):
+                return { 
+                    'color': obj.html_color, 
+                    'blink': obj.blink
+                }
+            iterable = iter(obj)
+        except TypeError:
+            pass
+        else:
+            return list(iterable)
+        return JSONEncoder.default(self, obj)
+
+
+app.json_encoder = JSON_Improved
 
 @app.route('/<path:path>.js', methods=['GET'])
 def static_proxy(path):
@@ -115,13 +133,15 @@ def refresh_sunrise():
 
 @app.route('/api/conditions', methods=['GET'])
 def get_conditions():
-    return jsonify(sectional.configuration.condition_color_map)
+    return sectional.configuration.conditions
 
 @app.route('/api/condition/<condition>', methods=['POST'])
 def set_condition(condition):
     color_array = request.json['color']
-    color = Color(color_array)
+    blink = request.json['blink']
+    color = Color(color_array, blink=blink)
     sectional.configuration.set_color_for_condition(condition, color)
+    sectional.configuration.save_config()
     return jsonify({'status': 'OK'})
 
 @app.route('/api/airportsearch', methods=['GET'])

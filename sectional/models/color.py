@@ -3,11 +3,21 @@ import colour
 
 class Color(object):
 
-    def __init__(self, val):
+    def __init__(self, val, blink=False):
         if (type(val) is tuple):
             self.rgb = (val[0], val[1], val[2])
         else:
             self.rgb = tuple([round(i * 255) for i in colour.Color(val).rgb])
+
+        self._blink = blink
+
+    @property
+    def blink(self):
+        return self._blink
+        
+    @property
+    def html_color(self):
+        return "#{:02x}{:02x}{:02x}".format(*self.rgb)
 
     @staticmethod
     def ALL_COLORS():

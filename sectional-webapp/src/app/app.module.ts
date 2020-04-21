@@ -16,6 +16,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete'
 import { MatToolbarModule } from '@angular/material/toolbar'
 import { MatMenuModule } from '@angular/material/menu'
 import { MatSelectModule } from '@angular/material/select'
+import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatIconModule } from '@angular/material/icon'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MccColorPickerModule } from 'material-community-components'
@@ -46,7 +47,8 @@ import { ConfigComponent } from './config/config.component';
     MatMenuModule,
     MatIconModule,
     MccColorPickerModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatCheckboxModule
   ],
   providers: [
   ],

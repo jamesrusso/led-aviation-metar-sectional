@@ -76,7 +76,7 @@ export class DataserviceService {
   }
 
   public set_condition(condition, color) : any { 
-    return this.http.post('/api/condition/'+condition, { 'color': color });
+    return this.http.post('/api/condition/'+condition, { 'color': color.color, 'blink': color.blink });
   }
 
 }

@@ -5,25 +5,60 @@ from sectional.renderers import RendererFactory
 
 from threading import Lock
 
+DEFAULT_COLOR_FOR_CONDITION = { 
+    AirportCondition.IFR: Color('#ff0000', blink=False),
+    AirportCondition.INOP: Color('#000000', blink=False),
+    AirportCondition.INVALID: Color('#ffc0cb', blink=True),
+    AirportCondition.LIFR: Color('#ff00ff', blink=False),
+    AirportCondition.MVFR: Color('#0000ff', blink=False),
+    AirportCondition.NIGHT: Color('#ffff00', blink=False),
+    AirportCondition.NIGHT_DARK: Color('#141400', blink=False),
+    AirportCondition.SMOKE: Color('#323232', blink=False),
+    AirportCondition.VFR: Color('#00ff00', blink=False)
+}
+
 class Configuration(object):
-    def __init__(self):
+    def __init__(self, config_path='./config/config.yaml'):
         self.lock = Lock()
         self._config = {}
-        self._condition_map = {}
         self._renderer = None
         self._config['pixel_map'] = {}
-        self.load_config()
+        self._config['conditions'] = {}
+        self.__setup_defaults()
+        self.path = config_path
 
-    def load_config(self, path="./config/config.yaml"):
-        self.lock.acquire()
-        with open(path) as s:
-            self._config = yaml.safe_load(s)
+    def __set_default(self, name, value): 
+        if (name not in self._config):
+            self._config[name] = value
 
-        if ('pixel_map' not in self._config):
-            self._config['pixel_map'] = {}
+    def __setup_defaults(self):
+
+        self.__set_default('conditions', {})
+        self.__set_default('pixel_map', {})
+        self.__set_default('pixel_count', 50)
+        self.__set_default('renderer_config', {'hostname': '127.0.0.1', 'name': 'remote', 'port': 5006})
+        self.__set_default('sunrise_refresh_interval', 1080)
+        self.__set_default('metar_inop_age', 180)
+        self.__set_default('metar_invalid_age', 90)
+        self.__set_default('metar_refresh_interval', 15)
+        self.__set_default('night_lights', True)
 
         for condition in AirportCondition:
-            self._condition_map[condition] = Color(self._config['conditions'][condition.value])
+            color = DEFAULT_COLOR_FOR_CONDITION[condition]
+            if (condition.value not in self._config['conditions']):
+                self._config['conditions'][condition.value] = color
+
+    def __generate_colors_for_conditions(self):
+        for (key, value) in self._config['conditions'].items():
+            if (type(value) is dict):
+                self._config['conditions'][key] = Color(value['color'], value['blink'])
+
+    def load_config(self):
+        self.lock.acquire()
+        with open(self.path) as s:
+            self._config = yaml.safe_load(s)
+        self.__setup_defaults()
+        self.__generate_colors_for_conditions()
         self.lock.release()
 
     def save_config(self, path='./config/config.yaml'):
@@ -33,7 +68,8 @@ class Configuration(object):
         self.lock.release()
 
     def get_color_for_condition(self, condition):
-        return self._condition_map[condition]
+        obj = self._config['conditions'][condition.value]
+        return Color(obj.color, blink=obj.blink)
 
     def set_color_for_condition(self, condition, color):
         if (type(color) is not Color):
@@ -42,11 +78,11 @@ class Configuration(object):
         if (type(condition) is str):
             condition = AirportCondition(condition)
 
-        self._condition_map[condition] = color
+        self._config['conditions'][condition.name] = color
 
     @property
-    def condition_color_map(self):
-        return dict([(item[0].value, item[1].rgb) for item in self._condition_map.items()])
+    def conditions(self):
+        return self._config['conditions']
 
     @property
     def metar_refresh_interval(self):
