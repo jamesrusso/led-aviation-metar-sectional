@@ -68,7 +68,7 @@ class Airport(object):
 
         # Sunrise
         if (self.sunrise_data.is_daylight and self.sunrise_data.is_twilight):
-            return self.configuration.get_color_for_condition(AirportCondition.NIGHT_DARK).fade_to(self.configuration.color_for_condition(self.category), self.sunrise_data.proportion)
+            return self.configuration.get_color_for_condition(AirportCondition.NIGHT_DARK).fade_to(self.configuration.get_color_for_condition(self.category), self.sunrise_data.proportion)
 
         # Daylight
         elif (self.sunrise_data.is_daylight):
@@ -95,10 +95,13 @@ class Airport(object):
     @property
     def category(self):
         if (self.metar is None):
+            self.logger.warn("{} metar not found.".format(self.icao_airport_code))
             return AirportCondition.INVALID
         elif(self.metar.age.total_seconds() > self.configuration.metar_invalid_age * 60 ):
+            self.logger.warn("{} metar is {} minutes old (INVALID).".format(self.icao_airport_code, int(self.metar.age.total_seconds() / 60)))
             return AirportCondition.INVALID
         elif(self.metar.age.total_seconds() > self.configuration.metar_inop_age * 60):
+            self.logger.warn("{} metar is {} minutes old (INOP).".format(self.icao_airport_code, int(self.metar.age.total_seconds() /60)))
             return AirportCondition.INOP
         else:
             return self.metar.category
