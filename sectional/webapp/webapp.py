@@ -63,17 +63,6 @@ def json_default(obj):
 def airports():
     return json.dumps(sectional.airports, default=json_default)
 
-@app.route('/api/pixelcount', methods=['POST'])
-def set_led_count():
-    print(request.json)
-    sectional.configuration.pixelcount = int(request.json['pixelcount'])
-    sectional.configuration.save_config()
-    return jsonify({'pixelcount': sectional.configuration.pixelcount})
-
-@app.route('/api/pixelcount', methods=['GET'])
-def get_led_count():
-    return jsonify({'pixelcount': sectional.configuration.pixelcount})
-
 @app.route('/api/selftest', methods=['POST'])
 def run_self_test():
     sectional.run_self_test()
@@ -144,16 +133,22 @@ def set_condition(condition):
     sectional.configuration.save_config()
     return jsonify({'status': 'OK'})
 
-@app.route('/api/getoption/<name>', methods=['GET'])
+@app.route('/api/option/<name>', methods=['GET'])
 def get_option(name): 
     value = getattr(sectional.configuration, name)
     return jsonify({'status': 'OK', 'results': { 'name': name, 'value': value }});
 
-@app.route('/api/setoption/<name>', methods=['POST'])
+@app.route('/api/option/<name>', methods=['POST'])
 def set_option(name): 
     option = request.json
     setattr(sectional.configuration, name, option['value'])
     return jsonify({'status': 'OK', 'results':{ 'name': name, 'value': option['value'] } });
+
+
+@app.route('/api/reset_colors', methods=['POST'])
+def reset_colors():
+    sectional.configuration.reset_colors()
+    return jsonify({'status': 'OK' })
 
 @app.route('/api/airportsearch', methods=['GET'])
 def airport_search():

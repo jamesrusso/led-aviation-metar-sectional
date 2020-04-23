@@ -27,7 +27,7 @@ export class SetupComponent implements OnInit {
   public filteredAirports = []
   public isLoading = false
   public errorMsg = ""
-  public pixelCount = 0
+  public pixel_count = 0
   public pixelIndex = 0
   public metar: string = null
   public metar_loading: boolean = false
@@ -35,7 +35,7 @@ export class SetupComponent implements OnInit {
 
   constructor(private dataservice: DataserviceService, private formBuilder: FormBuilder) {
     this.initialSetupFormGroup = this.formBuilder.group({
-      pixelcount: [null, [Validators.required, Validators.min(1), Validators.max(999)]]
+      pixel_count: [null, [Validators.required, Validators.min(1), Validators.max(999)]]
     });
 
     this.airportSelectionFormGroup = this.formBuilder.group({
@@ -52,6 +52,7 @@ export class SetupComponent implements OnInit {
     if (event.selectedStep.label == "setpixelcount") {
 
     } else if (event.selectedStep.label == "testleds") {
+      this.dataservice.set_option('pixel_count', this.initialSetupFormGroup.get('pixel_count'))
       this.dataservice.selftest().subscribe()
 
     } else if (event.selectedStep.label == "airportassignment") {
@@ -87,7 +88,7 @@ export class SetupComponent implements OnInit {
 
     this.dataservice.setpixelcolor(this.pixelIndex, '#000').subscribe()
 
-    if (this.pixelIndex < this.pixelCount) {
+    if (this.pixelIndex < this.pixel_count) {
       this.pixelIndex = this.pixelIndex + 1
       this.loadPixelData()
     }
@@ -180,9 +181,9 @@ export class SetupComponent implements OnInit {
         }
       });
 
-    this.dataservice.get_pixelcount().subscribe((data) => {
-      this.pixelCount = data.pixelcount
-      this.initialSetupFormGroup.get("pixelcount").setValue(data.pixelcount)
+    this.dataservice.get_option('pixel_count').subscribe((data) => {
+      this.pixel_count = data.results.value
+      this.initialSetupFormGroup.get("pixel_count").setValue(data.results.value)
     })
   }
 }

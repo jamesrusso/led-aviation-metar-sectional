@@ -13,7 +13,7 @@
       <p class="mat-body">First, let us enter how many LEDS you have configured on the map.</p>
       <mat-form-field>
         <mat-label>Pixel Count</mat-label>
-        <input matInput placeholder="Pixel Count" formControlName="pixelcount" required>
+        <input matInput placeholder="Pixel Count" formControlName="pixel_count" required>
         <mat-error>
           Value must be between 0 and 999
         </mat-error>
@@ -37,7 +37,7 @@
     <p>We will now go through each LED and specify the airport it represents. The current METAR will be loaded and
       displayed for you to confirm that airport you have choose has a METAR available.</p>
     <section>
-      <h2>{{ pixelIndex + 1 }} of {{ pixelCount }}</h2>
+      <h2>{{ pixelIndex + 1 }} of {{ pixel_count }}</h2>
       <form [formGroup]="airportSelectionFormGroup">
         <mat-form-field>
           <mat-hint>name or icao identifier</mat-hint>

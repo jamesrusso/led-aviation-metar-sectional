@@ -1,6 +1,7 @@
 
 class RendererFactory:
-    def create(pixel_count, renderer_config):
+    @classmethod
+    def create(cls, pixel_count, renderer_config):
         if (renderer_config['name'] == 'dummy'):
             from sectional.renderers.dummy import DummyRenderer
             return DummyRenderer(pixel_count)

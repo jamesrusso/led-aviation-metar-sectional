@@ -126,6 +126,10 @@ class Configuration(object):
     def night_lights(self):
         return self._config['night_lights']
 
+    @night_lights.setter
+    def night_lights(self, val):
+        self._config['night_lights'] = val
+
     @property
     def setup_complete(self):
         return self._config['setup_complete']
@@ -137,7 +141,7 @@ class Configuration(object):
     @property
     def renderer(self):
         if (not self._renderer):
-            self._renderer = RendererFactory.create(self.pixelcount, self.renderer_config)
+            self._renderer = RendererFactory.create(self.pixel_count, self.renderer_config)
 
         return self._renderer
 
@@ -153,13 +157,24 @@ class Configuration(object):
     def get_pixels_for_airport(self, icao_airport_code): 
             return [int(x[0]) for x in filter(lambda item: item[1] == icao_airport_code, self._config['pixel_map'].items())]
 
-    @property
-    def pixelcount(self):
-        return int(self._config['pixelcount'])
+    def reset_colors(self): 
+        for condition in AirportCondition:
+            color = DEFAULT_COLOR_FOR_CONDITION[condition]
+            self._config['conditions'][condition.value] = { 'color': color.html_color, 'blink': color.blink }
+        self.__generate_colors_for_conditions()
 
-    @pixelcount.setter
-    def pixelcount(self, val):
-        self._config['pixelcount'] = int(val)
+    def __generate_colors_for_conditions(self):
+        self._conditions = {}
+        for (key, value) in self._config['conditions'].items():
+                self._conditions[key] = Color(value['color'], value['blink'])
+
+    @property
+    def pixel_count(self):
+        return int(self._config['pixel_count'])
+
+    @pixel_count.setter
+    def pixel_count(self, val):
+        self._config['pixel_count'] = int(val)
 
     @property
     def renderer_config(self):

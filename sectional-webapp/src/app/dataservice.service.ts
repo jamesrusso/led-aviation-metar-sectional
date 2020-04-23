@@ -87,4 +87,16 @@ export class DataserviceService {
     return this.http.post('/api/condition/'+condition, { 'color': color.color, 'blink': color.blink });
   }
 
+  public get_option(option) : any { 
+    return this.http.get('/api/option/'+option).pipe(catchError(this.handleError))
+  }
+
+  public set_option(option, val) : any { 
+    return this.http.post('/api/option/'+option, { 'value': val }).pipe(catchError(this.handleError))
+  }
+
+  public reset_colors() : any { 
+    return this.http.post('/api/reset_colors', {}).pipe(catchError(this.handleError))
+  }
+
 }

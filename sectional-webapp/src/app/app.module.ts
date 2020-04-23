@@ -19,8 +19,8 @@ import { MatSelectModule } from '@angular/material/select'
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatIconModule } from '@angular/material/icon'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import { MccColorPickerModule } from 'material-community-components'
-import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
 import { ConfigComponent } from './config/config.component';
 
 @NgModule({
@@ -48,7 +48,8 @@ import { ConfigComponent } from './config/config.component';
     MatIconModule,
     MccColorPickerModule,
     MatToolbarModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatSlideToggleModule
   ],
   providers: [
   ],

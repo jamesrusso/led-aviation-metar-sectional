@@ -4,9 +4,24 @@
     width: 100px;
 }
 
-mat-checkbox { 
+.blink-checkbox { 
     display: inline-block;
     position: relative;
     top: -3px;
     padding-left: 10px;
+}
+.night-light-hint {
+    padding-top: 5px;
+    display: block;
+    color:rgb(0,0,0,.54);
+    font-size: 75%
+}
+
+.configurable-option {
+    width: 40%;
+    padding-top: 15px;
+}
+
+section { 
+    padding-left: 50px;
 }

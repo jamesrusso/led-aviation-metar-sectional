@@ -1,18 +1,73 @@
-
 <h2>Actions</h2>
-
 <section>
-    <div>
         <button mat-button (click)="refreshMetars()" color="primary">Refresh Metars</button>
-    </div>
-    <div>
         <button mat-button (click)="refreshSunrise()" color="primary">Refresh Sunrise/Sunset Data</button>
-    </div>
 </section>
 
+<h2>Configuration Options</h2>
+<section>
+<form [formGroup]="configurationOptions">
+    <p>
+        <mat-slide-toggle formControlName="night_lights" color="primary">Night Lights</mat-slide-toggle>
+        <span class="night-light-hint">Fade the stations from their condition to NIGHT and NIGHT_DARK during sunset/sunrise.</span>
+    </p>
+    <p>
+        <mat-form-field class="configurable-option">
+            <mat-label>Pixel Count</mat-label>
+            <input matInput matInput type="number" formControlName="pixel_count" placeholder="">
+            <mat-hint>Number of pixels</mat-hint>
+        </mat-form-field>
+    </p>
+    <p>
+        <mat-form-field class="configurable-option">
+            <mat-label>Metar Refresh Interval</mat-label>
+            <input matInput matInput type="number" formControlName="metar_refresh_interval" placeholder="">
+            <mat-hint>Minutes between fetching METARs</mat-hint>
+        </mat-form-field>
+    </p>
+
+    <p>
+        <mat-form-field class="configurable-option">
+            <mat-label>Metar Invalid Age</mat-label>
+            <input matInput matInput type="number" formControlName="metar_invalid_age" placeholder="">
+            <mat-hint>Minutes before metar is considered invalid.</mat-hint>
+        </mat-form-field>
+    </p>
+
+    <p>
+        <mat-form-field class="configurable-option">
+            <mat-label>Metar INOP Interval</mat-label>
+            <input matInput matInput type="number" formControlName="metar_inop_age" placeholder="">
+            <mat-hint>Minutes before airport is marked INOP due to metar age</mat-hint>
+        </mat-form-field>
+    </p>
+
+
+    <p>
+        <mat-form-field class="configurable-option">
+            <mat-label>Metar Refresh Interval</mat-label>
+            <input matInput matInput type="number" formControlName="metar_invalid_age" placeholder="">
+            <mat-hint>Time before a METAR is considered INVALID.</mat-hint>
+        </mat-form-field>
+    </p>
+  
+    <p>
+        <mat-form-field class="configurable-option">
+            <mat-label>Sunrise/Sunset Data Refresh Interval</mat-label>
+            <input matInput matInput type="number" formControlName="sunrise_refresh_interval" placeholder="">
+            <mat-hint>Minutes between fetching Sunrise Data</mat-hint>
+        </mat-form-field>
+    </p>
+</form>
+</section>
 <h2>Condition Colors</h2>
+<section>
 <div *ngFor="let condition of conditions | keyvalue">
     <span class="condition-label">{{ condition.key }}</span>
-    <mcc-color-picker class="condition-color" (selected)="colorSelected(condition.key, $event)" [selectedColor]="condition.value.color"></mcc-color-picker>
-    <mat-checkbox (change)="blinkChanged(condition.key,$event)" [checked]="condition.value.blink">Blink</mat-checkbox>
+    <mcc-color-picker class="condition-color"  hideUsedColors="true" hideButtons="true" (change)="colorSelected(condition.key, $event)"
+        [selectedColor]="condition.value.color"></mcc-color-picker>
+    <mat-checkbox class="blink-checkbox" (change)="blinkChanged(condition.key,$event)" [checked]="condition.value.blink">Blink</mat-checkbox>
 </div>
+
+<button mat-button color="primary" (click)="resetColors()">Reset Colors to Default</button>
+</section>
