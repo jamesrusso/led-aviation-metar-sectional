@@ -8,8 +8,8 @@ formatters:
         datefmt: '%Y-%m-%d %H:%M:%S'
 loggers: 
     'sectional':
-        level: WARN
-        handlers: [file, console]
+        level: INFO
+        handlers: [file,console]
         propogate: false
 handlers:
       console:
