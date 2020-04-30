@@ -36,7 +36,7 @@ pixel_map:
   '1': KLHZ
 pixelcount: 2
 renderer_config:
-  hostname: 10.20.219.92
+  hostname: 127.0.0.1
   name: dummy
   port: 5006
 setup_complete: true
@@ -47,9 +47,9 @@ sunrise_refresh_interval: 1080
 # 2 - Places I've Been (requires FF Logbook configuration)
 # 3 - Places I've been Heatmap (requires FF logbook configuration) (todo)
 # 4 - Density Altitude Heatmap (todo)
-display: 1 
+display: 2
 #ForeFlight Configuration Parameters
-ff_username: ''
-ff_password: ''
+ff_username: 'email'
+ff_password: 'pass'
 # Refresh Interval in hours (default 24 hrs)
 ff_refresh_interval: 24

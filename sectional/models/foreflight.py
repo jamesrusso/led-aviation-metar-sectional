@@ -58,11 +58,11 @@ class Foreflight(object):
         """
         Given list of airports that user has been to, apply to list of airports actually available on the map (pixel_map)
         """    
-        airport_visits = []
+        airport_visits = [] * 2
         
         for airport in self.airports: 
             for destination in self.destinations:
                 if airport == destination:
-                    airport_visits.append({destination, self.destinations[destination]})
+                    airport_visits.append({destination : self.destinations[destination]})
                     break
         return airport_visits
