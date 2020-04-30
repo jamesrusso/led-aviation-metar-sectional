@@ -11,6 +11,8 @@ class ForeflightRefreshThread(Thread):
         self.logger = logging.getLogger(__name__)
         Thread.__init__(self, name="ForeflightRefreshThread", daemon=True)
         self.sectional = sectional
+        self.configuration = sectional.configuration
+        self.ff_refresh_interval = sectional.configuration.foreflight_refresh_interval
         self.wait_condition = Condition()
         self.initial_load_event = Event()
         self.running = True
@@ -26,11 +28,8 @@ class ForeflightRefreshThread(Thread):
             try:
                 self.wait_condition.acquire()
                 self.logger.debug("obtaining ForeFlight logbook data")
-                logbook = DataService.obtain_ff_logbook(self.sectional.ff_username, self.sectional.ff_password)
-                
-                for metar in metars:
-                    self.sectional.airport(metar.icao_airport_code).metar = metar
+                self.sectional.logbook = DataService.obtain_ff_logbook(self.configuration)
                 self.initial_load_event.set()
-                self.wait_condition.wait(self.sectional.configuration.ff_refresh_interval * 60 * 60)
+                self.wait_condition.wait(self.ff_refresh_interval * 3600)
             except Exception:
                 self.logger.error("exception occurred while obtaining ForeFlight logbook data.",exc_info=True)

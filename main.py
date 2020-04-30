@@ -3,6 +3,7 @@ from sectional.common import logging_helper
 import logging
 from sectional.webapp import webapp
 
+
 LOGGER = logging.getLogger(__name__)
 
 if (__name__ == "__main__"):

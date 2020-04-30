@@ -49,7 +49,7 @@ class Configuration(object):
         self.__set_default('metar_invalid_age', DEFAULT_METAR_INVALID_AGE)
         self.__set_default('metar_refresh_interval', DEFAULT_METAR_REFRESH_INTERVAL)
         self.__set_default('night_lights', DEFAULT_NIGHT_LIGHTS)
-        self.__set_default('display',DEFAULT_DISPLAY)
+        self.__set_default('display', DEFAULT_DISPLAY)
 
         for condition in AirportCondition:
             color = DEFAULT_COLOR_FOR_CONDITION[condition]

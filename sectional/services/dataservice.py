@@ -6,7 +6,9 @@ import requests
 import urllib
 import re
 from sectional.models import SunriseSunsetData, Airport, Metar
+from sectional.models.foreflight import Foreflight
 import ssl 
+
 
 class DataService(object):
     @classmethod
@@ -77,7 +79,6 @@ class DataService(object):
 
     @classmethod
     def obtain_metars(cls, airport_codes):
-        ssl._create_default_https_context = ssl._create_unverified_context
         logger = logging.getLogger(__name__)
         logger.info("Obtaining METAR data for {}".format(list(airport_codes)))
         metar_list = "%20".join(airport_codes)
@@ -88,19 +89,33 @@ class DataService(object):
         return [Metar(x) for x in metars]
 
     @classmethod
-    def obtain_ff_logbook(cls, ff_username, ff_password):
+    def obtain_ff_logbook(cls, configuration):
+        import time
         # hack for stupid mac and giving up on getting certificates installed
-        ssl._create_default_https_context = ssl._create_unverified_context
+        ff_username = configuration.ff_username
+        ff_password = configuration.ff_password
         logger = logging.getLogger(__name__)
         logger.info("Logging into Foreflight as {}".format(ff_username))
         foreflight_url = 'https://plan.foreflight.com'
         request_url = foreflight_url + '/api/1/logbook/export/csv'
+        status_url = foreflight_url + '/api/1/logbook/export/status/csv/'
         logout_url = foreflight_url + '/auth/logout'
         with requests.Session() as s:
             s.get(foreflight_url)
             s.post(foreflight_url, data={'username': ff_username, 'password': ff_password})
             logger.info("Downloading Logbook for {}".format(ff_username))
-            logbook = s.get(request_url)
+            logbook_generate_request = s.get(request_url, stream = True).json()
+            while logbook_generate_request['result']['status'] == "RUNNING": 
+                logger.debug("Foreflight Logbook request generated, waiting on response...")
+                logbook_generate_request = s.get(status_url + logbook_generate_request['result']['requestId']).json()
+                time.sleep(5)
+            if logbook_generate_request['result']['status'] == "FINISHED":
+                try:
+                    logbook_csv = s.get(logbook_generate_request['result']['link'])
+                    logger.debug("Retrieved logbook from AWS")
+                except:
+                    logger.debug("Could not retrieve logbook request {}".format(logbook_generate_request['request']['requestId']))
+            #logbook = csv.reader(logbook_csv, delimiter = ",")
             s.get(logout_url)
-        return logbook
+        return Foreflight(logbook_csv, configuration)
         
