@@ -96,7 +96,7 @@ In addition to support for WS2801 and WS2811 LEDS, I also added support for a re
     The WS2811 module needs to run as root, so login as root or su - to root and install
     the following modules:
 
-    pip3 install pyyaml colour python-dateutil coloredlogs
+    pip3 install pyyaml colour python-dateutil coloredlogs pandas
 
     cd sectional-webapp
     ng build --watch
