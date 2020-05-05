@@ -22,6 +22,7 @@ DEFAULT_METAR_REFRESH_INTERVAL =15
 DEFAULT_NIGHT_LIGHTS = True
 DEFAULT_PIXEL_COUNT = 50
 DEFAULT_SUNRISE_REFRESH_INTERVAL = 1080
+DEFAULT_DISPLAY = 1
 
 class Configuration(object):
     def __init__(self, config_path='./config/config.yaml'):
@@ -48,6 +49,7 @@ class Configuration(object):
         self.__set_default('metar_invalid_age', DEFAULT_METAR_INVALID_AGE)
         self.__set_default('metar_refresh_interval', DEFAULT_METAR_REFRESH_INTERVAL)
         self.__set_default('night_lights', DEFAULT_NIGHT_LIGHTS)
+        self.__set_default('display', DEFAULT_DISPLAY)
 
         for condition in AirportCondition:
             color = DEFAULT_COLOR_FOR_CONDITION[condition]
@@ -190,3 +192,18 @@ class Configuration(object):
                 airports[icao_airport_code].append(int(pixel))
 
         return airports
+    @property
+    def display(self):
+        return self._config['display']
+
+    @property
+    def foreflight_refresh_interval(self):
+        return self._config['ff_refresh_interval']
+
+    @property
+    def ff_username(self):
+        return self._config['ff_username'] 
+    
+    @property
+    def ff_password(self):
+        return self._config['ff_password']

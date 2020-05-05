@@ -30,85 +30,26 @@ metar_inop_age: 180
 metar_invalid_age: 90
 metar_refresh_interval: 15
 night_lights: true
-pixel_count: 73
+pixel_count: 2
 pixel_map:
-  '0': KEYW
-  '1': KMTH
-  '10': KFPR
-  '11': KVRB
-  '12': KMLB
-  '13': KXMR
-  '14': KTIX
-  '15': KMCO
-  '16': KEVB
-  '17': KDAB
-  '18': KOMN
-  '19': KVQQ
-  '2': KHST
-  '20': KNIP
-  '21': KCRG
-  '22': KNRB
-  '23': KFHB
-  '24': KJAX
-  '25': KSGJ
-  '26': KJAX
-  '27': KLCQ
-  '28': K24J
-  '29': K40J
-  '3': KMIA
-  '30': KTLH
-  '31': K1J0
-  '32': K54J
-  '33': KPNS
-  '34': KDTS
-  '35': KECP
-  '36': KPAM
-  '37': KPBI
-  '38': KCTY
-  '39': KGNV
-  '4': KFLL
-  '40': KX60
-  '41': KOCF
-  '42': KLEE
-  '43': KINF
-  '44': KCGC
-  '45': KBKV
-  '46': KTPA
-  '47': KSRQ
-  '48': KRSW
-  '49': KIMM
-  '5': KFXE
-  '50': KAPF
-  '51': KHST
-  '52': KTMB
-  '53': KMIA
-  '54': KOPF
-  '55': KHWO
-  '56': KFLL
-  '57': KFXE
-  '58': KPMP
-  '59': KBCT
-  '6': KBCT
-  '60': KSFB
-  '61': KORL
-  '62': KMCO
-  '63': KISM
-  '64': KZPH
-  '65': KVDF
-  '66': KTPA
-  '67': KCLW
-  '68': KPIE
-  '69': KTPF
-  '7': KPBI
-  '70': KMCE
-  '71': KSPG
-  '72': KSRQ
-  '8': KSUA
-  '9': KOBE
-pixelcount: 73
+  '0': KRDU
+  '1': KLHZ
+pixelcount: 2
 renderer_config:
-  hostname: 10.20.219.92
-  name: remote
+  hostname: 127.0.0.1
+  name: dummy
   port: 5006
 setup_complete: true
 sunrise_refresh_interval: 1080
+#The following shows what will be displayed on the map by default (int)
+#Possible values: 
+# 1 - Metar (default) 
+# 2 - Places I've Been (requires FF Logbook configuration)
+# 3 - Places I've been Heatmap (requires FF logbook configuration) (todo)
+# 4 - Density Altitude Heatmap (todo)
+display: 2
+#ForeFlight Configuration Parameters
+ff_username: 'email'
+ff_password: 'pass'
+# Refresh Interval in hours (default 24 hrs)
+ff_refresh_interval: 24

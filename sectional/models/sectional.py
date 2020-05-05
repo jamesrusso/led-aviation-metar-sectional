@@ -1,4 +1,4 @@
-from sectional.threads import SelfTestThread, LEDUpdateThread, MetarRefreshThread, SunriseSunsetUpdateThread
+from sectional.threads import SelfTestThread, LEDUpdateThread, MetarRefreshThread, SunriseSunsetUpdateThread, ForeflightRefreshThread
 from sectional.models import Configuration, Color
 from sectional.services import DataService
 from threading import Thread
@@ -39,7 +39,10 @@ class CategorySectional(object):
     def initialize(self):
         """Initialize the sectional
         """
-        self.metar_refresh_thread = MetarRefreshThread(sectional=self)
+        if self.configuration.display == 1:
+            self.metar_refresh_thread = MetarRefreshThread(sectional=self)
+        elif self.configuration.display == 2:
+            self.foreflight_refresh_thread = ForeflightRefreshThread(sectional=self)
         self.update_sunrise_sunset_thread = SunriseSunsetUpdateThread(sectional=self)
         self.led_update_thread = LEDUpdateThread(sectional=self)
 
@@ -95,11 +98,17 @@ class CategorySectional(object):
                 self.airports = DataService.create_airports(self.configuration)
                 self.run_self_test()
                 self.update_sunrise_sunset_thread.start()
-                self.metar_refresh_thread.start()
-                self.logger.info("Waiting for initial loading of METAR data to complete...")
-                self.metar_refresh_thread.initial_load_event.wait()
-                self.logger.info("Metar data has been loaded...")
-                self.logger.info("Waiting for initial load of sunrise and sunset data to complete...")
+                if self.configuration.display == 1:
+                    self.metar_refresh_thread.start()
+                    self.logger.info("Waiting for initial loading of METAR data to complete...")
+                    self.metar_refresh_thread.initial_load_event.wait()
+                    self.logger.info("Metar data has been loaded...")
+                    self.logger.info("Waiting for initial load of sunrise and sunset data to complete...")
+                elif self.configuration.display == 2: 
+                    self.foreflight_refresh_thread.start()
+                    self.logger.info("Waiting for initial loading of Foreflight Logbook to complete...")
+                    self.foreflight_refresh_thread.initial_load_event.wait()
+                    self.logger.info("Foreflight logbook has loaded...")
                 self.update_sunrise_sunset_thread.initial_load_event.wait()
                 self.logger.info("initial load of sunrise and sunset data to complete...")
                 Thread.join(self.self_test_thread)
