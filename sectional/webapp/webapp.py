@@ -95,9 +95,11 @@ def clear_pixels():
 @app.route('/api/setup_complete', methods=['POST'])
 def setup_complete(): 
     setup_complete = request.json['setup_complete']
-    sectional.configuration.setup_complete(setup_complete)
-    sectional.configuration.save_config()
-    sectional.start()
+    if (sectional.configuration.setup_complete is False):
+        sectional.configuration.setup_complete = setup_complete
+        sectional.configuration.save_config()
+        sectional.start()
+    return jsonify({'setup_complete': sectional.configuration.setup_complete })
 
 @app.route('/api/metar/<airport>', methods=['GET'])
 def get_metar(airport):
@@ -142,6 +144,7 @@ def get_option(name):
 def set_option(name): 
     option = request.json
     setattr(sectional.configuration, name, option['value'])
+    sectional.configuration.save()
     return jsonify({'status': 'OK', 'results':{ 'name': name, 'value': option['value'] } });
 
 
