@@ -83,7 +83,7 @@ export class SetupComponent implements OnInit {
     }
 
     if (this.airportSelectionFormGroup.get('airport').value != null) {
-      this.dataservice.setairportforpixel(this.pixelIndex, this.airportSelectionFormGroup.get('airport').value.icao_airport_code).subscribe()
+      this.dataservice.setairportforpixel(this.pixelIndex, this.airportSelectionFormGroup.get('airport').value).subscribe()
     }
 
     this.dataservice.setpixelcolor(this.pixelIndex, '#000').subscribe()

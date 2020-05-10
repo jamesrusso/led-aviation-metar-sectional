@@ -144,7 +144,7 @@ def get_option(name):
 def set_option(name): 
     option = request.json
     setattr(sectional.configuration, name, option['value'])
-    sectional.configuration.save()
+    sectional.configuration.save_config()
     return jsonify({'status': 'OK', 'results':{ 'name': name, 'value': option['value'] } });
 
 
