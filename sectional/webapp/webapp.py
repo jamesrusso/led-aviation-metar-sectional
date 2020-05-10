@@ -88,7 +88,7 @@ def set_led(index):
 
 @app.route('/api/clearpixels', methods=['POST'])
 def clear_pixels():
-    for idx in range(sectional.configuration.pixelcount):
+    for idx in range(sectional.configuration.pixel_count):
         sectional.set_led(int(idx), Color.BLACK())
     return jsonify({'status': 'OK'})
 
