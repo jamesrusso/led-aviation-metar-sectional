@@ -2,7 +2,7 @@ import neopixel # pylint: disable=import-error
 import board # pylint: disable=import-error
 
 class Ws2811Renderer(object):
-    def __init__(self, pixel_count, gpio_port, pixel_order='RGB'):
+    def __init__(self, pixel_count, gpio_port, pixel_order='GRB'):
         """
         Create a new controller for the WS2811 based lights
 
@@ -53,4 +53,4 @@ class Ws2811Renderer(object):
         """
         This method called when shutting down the system. It is used to allow the renderer to cleanup any resources which were used.
         """
-        pass
+        Bass
