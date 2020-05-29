@@ -57,7 +57,7 @@ sunrise_refresh_interval: 1080
 # 4 - Density Altitude Heatmap (todo)
 display: 1
 #ForeFlight Configuration Parameters
-ff_username: 'shoffman@hofftech.net'
-ff_password: 'Sm0knB1ke'
+ff_username: ''
+ff_password: ''
 # Refresh Interval in hours (default 24 hrs)
 ff_refresh_interval: 24
