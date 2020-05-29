@@ -31,10 +31,10 @@ class CategorySectional(object):
         """
         return self.airports[airport_icao_code]
 
-    def set_airport_color(self, airport, color):
-        airport = self.airport(airport)
-        color = Color(color)
-        airport.color_override = color
+    #def set_airport_color(self, airport, color):
+    #    airport = self.airport(airport)
+    #    color = Color(color)
+    #    airport.color_override = color
 
     def initialize(self):
         """Initialize the sectional

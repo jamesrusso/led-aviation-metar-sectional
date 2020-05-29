@@ -37,4 +37,4 @@ class DummyRenderer(object):
             pixel_index = [pixel_index]
 
         for p in pixel_index:
-            logging.info("pixel {} set to {}".format(p, color))
+            self.logger.debug("pixel {} set to {}".format(p, color))

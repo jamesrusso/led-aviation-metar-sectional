@@ -26,15 +26,23 @@ conditions:
   VFR:
     blink: false
     color: '#00ff00'
+  VISITED:
+    blink: false
+    color: '#00ff00'
+  NOTVISITED:
+    blink: false
+    color: '#ff0000'
 metar_inop_age: 180
 metar_invalid_age: 90
 metar_refresh_interval: 15
 night_lights: true
-pixel_count: 2
+pixel_count: 4
 pixel_map:
   '0': KRDU
   '1': KLHZ
-pixelcount: 2
+  '2': KHNZ
+  '3': KOCW
+pixelcount: 4
 renderer_config:
   hostname: 127.0.0.1
   name: dummy
@@ -47,9 +55,9 @@ sunrise_refresh_interval: 1080
 # 2 - Places I've Been (requires FF Logbook configuration)
 # 3 - Places I've been Heatmap (requires FF logbook configuration) (todo)
 # 4 - Density Altitude Heatmap (todo)
-display: 2
+display: 1
 #ForeFlight Configuration Parameters
-ff_username: 'email'
-ff_password: 'pass'
+ff_username: 'shoffman@hofftech.net'
+ff_password: 'Sm0knB1ke'
 # Refresh Interval in hours (default 24 hrs)
 ff_refresh_interval: 24

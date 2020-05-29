@@ -10,6 +10,7 @@ class LEDUpdateThread(Thread):
         self.sectional = sectional
         self.running = True
         self.renderer = sectional.renderer
+        #self.display = sectional.display
         self.condition = Condition()
         self.on_cycle = True
 

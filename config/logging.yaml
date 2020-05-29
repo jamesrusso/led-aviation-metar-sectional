@@ -9,8 +9,8 @@ formatters:
 loggers: 
     'sectional':
         level: DEBUG
-        #handlers: [file,console]
-        handlers: [file]
+        handlers: [file,console]
+        #handlers: [file]
         propogate: false
 handlers:
       console:
